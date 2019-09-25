@@ -51,16 +51,22 @@ describe('app', () => {
     
     renderProducts(loadProducts())
     const products = document.getElementById('products')
-  
     expect(products
       .childNodes[0]
       .childNodes[1]
-      .childNodes[1]
-      .innerText).toBe(productsList[1].price)
+      .childNodes[2]
+      .innerText).not.toBe(undefined)
     document.getElementById('products').remove()     
   })
 
+  it('should format price from price, and currency symbol', () => {
+    const price = formatPrice(productsList[1])
+    expect(price).toBe(`${productsList[1].price}${productsList[1].sym}`)
+  })
 
-
+  it('should render quantity controls', () => {
+    let qControl = renderQuantityControls()
+    expect(qControl.childNodes[0].innerText).toBe('+')
+  })
 
 })
