@@ -1,2 +1,22 @@
 notes
 
+Code         | Name         |  Price
+------------------------------------
+GOKU         | Goku POP     |   5.00€
+NARU         | Naruto POP   |  20.00€
+LUF          |Luffy POP     |   7.50€
+
+
+You should:
+Implement the cart logic, load products and add / remove  buttons (left side)
+Add the presentation logic to update "Order summary" subsection whenever a product is added or removed (right site).
+
+Take into account the following aspects:
+Only Vanilla JS (ES5 & ES6) and JQuery is allowed is this exercise from JS perspective.
+Feel free to use tooling (Task runners, unit test, linters or css pre-processors).
+Follow the design as much as you can. Feel free to download the images that you consider.
+
+Implement these products discounts that will be applied automatically under some conditions:
+2-for-1 promotions: buy two of the same product, get one free, applied to GOKU items.
+bulk discounts: buying x or more of a product, the price of that product is reduced, 
+applied to NARU item. P.e. if you buy 3 or more NARU items, the price per unit should be 19.00€.
