@@ -19,10 +19,10 @@ const app = () => {
 }
 
 document.addEventListener(DISPATCH, (event) => {
-  const d = event.detail
+  const  { action } = event.detail
   if (action == 'more') {  } // update basket
 
-  console.log(d)
+  console.log(event.detail)
   
 
 })
@@ -43,8 +43,12 @@ const loadProducts = () => {
   return JSON.parse(localStorage.getItem(PRODUCT_STORE))
 }
 
-const loadBasket = () => {
+const readBasket = () => {
   return JSON.stringify(localStorage.getItem(BASKET))
+}
+
+const writeBasket = (data) => {
+  localStorage.setItem(BASKET, JSON.stringify(data))
 }
 
 const renderProducts = (pList) => {
