@@ -39,16 +39,38 @@ const dispatch = (detail) => {
 
 
 
-const loadProducts = () => {
+const readProducts = () => {
   return JSON.parse(localStorage.getItem(PRODUCT_STORE))
 }
 
 const readBasket = () => {
-  return JSON.stringify(localStorage.getItem(BASKET))
+  return JSON.parse(localStorage.getItem(BASKET))
 }
 
 const writeBasket = (data) => {
   localStorage.setItem(BASKET, JSON.stringify(data))
+}
+
+const updateBasket = (productCode, quantity) => {
+  if (!productCode && quantity) return 'error'
+  let basket = createBasket(readBasket())
+  let newQuantity = doProductQuantity(basket, productCode, quantity)
+  basket.products[productCode] =  { code: productCode, quantity: newQuantity } 
+  writeBasket(basket)
+  return basket
+}
+
+const doProductQuantity = (basket, productCode, newQuantity) => {
+  if (!newQuantity) return 0
+  const p = basket.products[productCode]
+  if (p == undefined) return newQuantity
+  return (p.quantity - 0) + (newQuantity - 0)
+}
+
+const createBasket = (basket) => {
+  if (!basket) basket = {}
+  if (!basket.products) basket.products = {}
+  return basket
 }
 
 const renderProducts = (pList) => {

@@ -19,23 +19,35 @@ describe('app', () => {
     { code: 'GOKU', name: 'Goku POP', price: '5.00', cur: 'euro', sym: '€' },
     { code: 'NARU', name: 'Naruto POP', price: '20.00', cur: 'euro', sym: '€' },
     { code: 'LUF', name: 'Luffy POP', price: '7.50', cur: 'euro', sym: '€' },
-
   ]
 
   localStorage.setItem(PRODUCT_STORE, JSON.stringify(productsList))
+
+  const userBasket = {
+    userCode: '',
+    products: {
+      'test': { code: 'test', quantity: 'test' },
+    }
+  }
+  // const userBasket = {
+  //   userCode: '',
+  //   products: [
+  //     { code: 'test', quantity: 'test' },
+  //   ]
+  // }
 
   const userCode = 'uUid'
 
   describe('products', () => {
 
     it('should get product data from localStorage', () => {
-      const prods = loadProducts()
+      const prods = readProducts()
       expect(prods.length).toBe(3)
     })
 
 
     it('should render the products list', () => {
-      renderProducts(loadProducts())
+      renderProducts(readProducts())
       const products = document.getElementById('products')
       expect(products
         .childNodes[0]
@@ -46,7 +58,7 @@ describe('app', () => {
     })
 
     it('should render the product details', () => {
-      renderProducts(loadProducts())
+      renderProducts(readProducts())
       const products = document.getElementById('products')
       expect(products
         .childNodes[0]
@@ -65,6 +77,21 @@ describe('app', () => {
     it('should render quantity controls', () => {
       let qControl = renderQuantityControls()
       expect(qControl.childNodes[0].innerText).toBe('+')
+    })
+
+    it('should add items to the basket', () => {
+      localStorage.removeItem(BASKET)
+      const basket = updateBasket('NARU', 1)
+      expect(basket.products['NARU'].code).toBe('NARU')
+    })
+
+    it('should increment the quantity if an item code already exists', () => {
+      localStorage.removeItem(BASKET)
+      updateBasket('NARU', 1)
+      updateBasket('NARU', 2)
+      const basket = readBasket()
+
+      expect(basket.products['NARU'].quantity).toBe(3)
     })
 
   })
@@ -86,6 +113,12 @@ describe('app', () => {
     // it('should check if the basket has a userCode (if not, they are not logged on)', () => {
     //   expect(1).toBe(2)
     // })
+
+    xit('should read the basket and update any quantitys', () => {
+
+
+      expect(1).toBe(2)
+    })
 
   })
 
