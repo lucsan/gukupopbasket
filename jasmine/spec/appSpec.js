@@ -29,12 +29,6 @@ describe('app', () => {
       'test': { code: 'test', quantity: 'test' },
     }
   }
-  // const userBasket = {
-  //   userCode: '',
-  //   products: [
-  //     { code: 'test', quantity: 'test' },
-  //   ]
-  // }
 
   const userCode = 'uUid'
 
@@ -89,8 +83,7 @@ describe('app', () => {
       localStorage.removeItem(BASKET)
       updateBasket('NARU', 1)
       updateBasket('NARU', 2)
-      const basket = readBasket()
-
+      const basket = readBasket() 
       expect(basket.products['NARU'].quantity).toBe(3)
     })
 
@@ -110,15 +103,33 @@ describe('app', () => {
       expect(basket).not.toBe(null || undefined)
     })
 
-    // it('should check if the basket has a userCode (if not, they are not logged on)', () => {
+    it('should check the basket for a specific product', () => {
+      updateBasket('NARU', 1)
+      let product = checkBasketForProduct('NARU')
+      expect(product.code).toBe('NARU')
+    })
+
+    it('should update the productList view (shopping cart) with quantity', () => {
+      updateBasket('NARU', 5)
+      renderProducts(readProducts())
+      const products = document.getElementById('products')
+
+      expect(products
+        .childNodes[0]
+        .childNodes[1]
+        .childNodes[1]
+        .childNodes[1]
+        .value).not.toBe(5)
+
+      document.getElementById('products').remove()  
+    })
+
+    // it('should total the value of products in the basket', () => {
+    //   updateBasket('NARU', 3, true)
+    //   const basket = readBasket()
+    //   calcTotal()
     //   expect(1).toBe(2)
     // })
-
-    xit('should read the basket and update any quantitys', () => {
-
-
-      expect(1).toBe(2)
-    })
 
   })
 
