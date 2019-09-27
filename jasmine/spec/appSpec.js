@@ -87,6 +87,14 @@ describe('app', () => {
       expect(basket.products['NARU'].quantity).toBe(3)
     })
 
+    it('should total the value of products in the basket', () => {
+      updateBasket('NARU', 3, true)
+      const product = checkBasketForProduct('NARU')
+      let testTotal = product.quantity * productsList[1].price
+      let total = calcTotal('NARU')
+      expect(testTotal).toBe(total)
+    })
+
   })
 
   describe('user', () => {
@@ -113,23 +121,20 @@ describe('app', () => {
       updateBasket('NARU', 5)
       renderProducts(readProducts())
       const products = document.getElementById('products')
-
       expect(products
         .childNodes[0]
         .childNodes[1]
         .childNodes[1]
         .childNodes[1]
         .value).not.toBe(5)
-
       document.getElementById('products').remove()  
     })
 
-    // it('should total the value of products in the basket', () => {
-    //   updateBasket('NARU', 3, true)
-    //   const basket = readBasket()
-    //   calcTotal()
-    //   expect(1).toBe(2)
-    // })
+    it('should check the products list for a specific product', () => {
+      let product = checkProductsForProduct('NARU')
+      expect(product.price).toBe(productsList[1].price)
+    })
+
 
   })
 

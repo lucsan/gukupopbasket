@@ -11,6 +11,7 @@ const app = () => {
     console.log('main')
     
     renderProducts(readProducts())
+    renderSummary()
   }
   
   return {
@@ -23,16 +24,22 @@ document.addEventListener(DISPATCH, (event) => {
   const pList = readProducts()
   if (action == 'more') {   
     updateBasket(code, 1)
-    renderProducts(pList) 
+    renderProducts(pList)
+    renderSummary()
+    return
   }
   if (action == 'less') {   
     updateBasket(code, -1)
-    renderProducts(pList) 
+    renderProducts(pList)
+    renderSummary()
+    return
   }
   if (action == 'change') {
     if (isNaN(value)) return
     updateBasket(code, value, true)
-    
+    renderTotal(code)
+    renderSummary()
+    return
   }
 
   console.error('Unkown or unspecified action', event.detail)
@@ -46,7 +53,6 @@ const dispatch = (detail) => {
     )
   )
 }
-
 
 const readProducts = () => {
   return JSON.parse(localStorage.getItem(PRODUCT_STORE))
@@ -89,6 +95,11 @@ const checkBasketForProduct = (productCode) => {
   return basket.products[productCode]
 }
 
+const checkProductsForProduct = (productCode) => {
+  const products = readProducts()
+  return products.find(p => p.code == productCode)
+}
+
 const renderProducts = (pList) => {
   let pl = document.getElementById('productsList')
   if (pl) pl.remove()
@@ -98,7 +109,7 @@ const renderProducts = (pList) => {
   })
 
   let p = appTools().el('div', { id: 'products' })
-  let o = document.getElementById('appOutput')   
+  let o = document.getElementById(OUTPUT)   
   p.appendChild(l) 
   o.appendChild(p)  
 }
@@ -112,7 +123,7 @@ const renderProductDetails = (product) => {
   let name = appTools().el('div', { classes: 'product-name', text: product.name } )
   let price = appTools().el('div', { classes: 'product-price', text: formatPrice(product) } )
   let quantity = renderQuantityControls(product.code, (userQuantity + (product.quantity - 0)))
-  let totalLine = appTools().el('div', { classes: 'line-total', text: 'total' })
+  let totalLine = appTools().el('div', { classes: 'line-total', text: formatTotal(product, calcTotal(product.code)) })
 
   li.appendChild(name)
   li.appendChild(quantity)
@@ -121,8 +132,24 @@ const renderProductDetails = (product) => {
   return li
 }
 
-const calcTotal = () => {
-  
+const renderTotal = (productCode) => {
+  let pe = document.querySelector(`#productsList li#${productCode} .line-total`)
+  pe.innerText = formatTotal(checkProductsForProduct(productCode), calcTotal(productCode))
+}
+
+const calcTotal = (productCode) => {
+  const product = checkProductsForProduct(productCode)
+  const basketItem = checkBasketForProduct(productCode)
+  if (!basketItem) return 0
+  return (product.price - 0) * (basketItem.quantity - 0)
+}
+
+const formatTotal = (product, value) => {
+  const { cur, sym } = product
+  let displayPrice = ''
+  if (cur == 'euro') displayPrice = `${value}.00${sym}`
+  if (cur == 'gbp') displayPrice = `${sym} ${value}.00`
+  return displayPrice  
 }
 
 const formatPrice = (product) => {
@@ -147,6 +174,47 @@ const renderQuantityControls = (productCode, quantity) => {
   control.appendChild(quant)
   control.appendChild(less)
   return control
+}
+
+const renderSummary = () => {
+  let oe = document.getElementById(OUTPUT)
+  let ose = document.getElementById('orderSummary')
+  if (ose) ose.remove()
+  let swe = appTools().el('div', { id: 'orderSummary' })
+  let ste = appTools().el('div', { classes: 'title, order-title', text: 'Order Summary' })
+  swe.appendChild(ste)
+
+  const basket = readBasket()
+
+  for (let p in basket.products) {
+    const product = checkProductsForProduct(p)
+    const item = basket.products[p]
+    const total = formatTotal(product, calcTotal(p))
+    let text = `${item.quantity} x ${product.name} = ${total}`
+    let pe = appTools().el('div', { text })
+    swe.appendChild(pe)
+  }
+
+  oe.appendChild(swe)
+
+  const de = appTools().el('div', { text: 'Discounts' })
+
+  const be = appTools().el('div', { text: 'Basket Total' })
+  
+  const ce = appTools().el('div', { text: 'Checkout', classes: '' })
+
+  swe.appendChild(de)
+  swe.appendChild(be)
+  swe.appendChild(ce)
+
+}
+
+const calcBasket = () => {
+  
+}
+
+const calcDiscounts = () => {
+  
 }
 
 
