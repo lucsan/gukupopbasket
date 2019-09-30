@@ -8,10 +8,17 @@
 
 describe('app', () => {
 
-  beforeAll(() => {
+  beforeEach(() => {
     let o = document.createElement('div')
     o.id = 'appOutput'
-    document.body.appendChild(o)     
+    let p = document.createElement('div')
+    p.id = 'products'
+    o.appendChild(p)      
+    document.body.appendChild(o)
+  })
+
+  afterEach(() => {
+    if (document.getElementById('products')) document.getElementById('products').remove()  
   })
 
 
@@ -46,9 +53,9 @@ describe('app', () => {
       expect(products
         .childNodes[0]
         .childNodes[1]
-        .childNodes[0]
-        .innerText).toBe(productsList[1].name)
-      document.getElementById('products').remove()    
+        .childNodes[1]
+        .childNodes[1]
+        .innerText).toBe(`Product code ${productsList[1].code}`)   
     })
 
     it('should render the product details', () => {
@@ -58,19 +65,18 @@ describe('app', () => {
         .childNodes[0]
         .childNodes[1]
         .childNodes[2]
-        .innerText).not.toBe(undefined)
-      document.getElementById('products').remove()     
+        .innerText).not.toBe(undefined) 
     })
 
   
     it('should format price from price, and currency symbol', () => {
-      const price = formatPrice(productsList[1])
+      const price = appTools().formatPrice(productsList[1])
       expect(price).toBe(`${productsList[1].price}${productsList[1].sym}`)
     })
   
     it('should render quantity controls', () => {
       let qControl = renderQuantityControls()
-      expect(qControl.childNodes[0].innerText).toBe('+')
+      expect(qControl.childNodes[0].innerText).toBe('➖')
     })
 
     it('should add items to the basket', () => {

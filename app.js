@@ -12,7 +12,7 @@ const app = () => {
     console.log('main')
     let output = document.getElementById(OUTPUT)
     output.className = 'columns'
-    let p = appTools().el('div', { id: 'products', classes: 'column is-two-thirds' })
+    let p = appTools().el('div', { id: PRODUCTS, classes: 'column is-two-thirds' })
     let pt = appTools().el('div', { text: 'Shopping Cart', classes: 'title product-title' })
     let ct = appTools().el('div', { classes: 'column-products-titles' })
     let nt = appTools().el('span', { text: 'Product', classes: 'product-title' })
