@@ -1,5 +1,9 @@
 📝 Hand built ES6 basket.
 
+Running on github pages: - 
+tests - https://lucsan.github.io/gukupopbasket/SpecRunner.html
+app - https://lucsan.github.io/gukupopbasket/app.html
+
 I consider this to be a viable MVP or first flush prototype. It is fully functional, but requires further dispay (css) and platform specifics before it can be progressed.
 
 ⚙ Setup: First run the tests (SpecRunner.html) this will generate the products list db in localStorage. Drag and drop app.html into a browser.
